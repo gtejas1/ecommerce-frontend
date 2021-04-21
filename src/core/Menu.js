@@ -1,5 +1,6 @@
-import React from 'react'
+import  React ,{Fragment} from 'react'
 import { Link, withRouter } from 'react-router-dom';
+import { isAuthenticated, signout } from "../auth/helper";
 
 const currentTab = (history, path) => {
     if (history.location.pathname === path)
@@ -31,21 +32,35 @@ const Menu = ({history}) => (
           A.Dashboard
         </Link>
       </li>
-      <li className="nav-item">
-        <Link style={currentTab(history, "/user/signup")} className="nav-link" to="/signup">
-          SignUp
-        </Link>
+      {!isAuthenticated() && (
+        <Fragment>
+        <li className="nav-item">
+          <Link style={currentTab(history, "/user/signup")} className="nav-link" to="/signup">
+            SignUp
+          </Link>
+        </li>
+        
+        <li className="nav-item">
+          <Link style={currentTab(history, "/user/signin")} className="nav-link" to="/signin">
+            SignIn
+          </Link>
+          </li>
+          </Fragment>         
+      )}
+      {isAuthenticated() && (
+        <li className="nav-item">
+          <span
+            className="nav-link text-warning"
+            onClick={() => {
+              signout(()=> {
+             history.push("/") 
+            })
+          }}
+          >
+            Signout
+        </span>
       </li>
-      <li className="nav-item">
-        <Link style={currentTab(history, "/user/signin")} className="nav-link" to="/signin">
-          SignIn
-        </Link>
-      </li>
-      <li className="nav-item">
-        <Link style={currentTab(history, "/user/signout")}  className="nav-link" to="/signout">
-          SignOut
-        </Link>
-      </li>
+      )}
     </ul>
   </div>
 );
