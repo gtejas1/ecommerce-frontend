@@ -19,7 +19,7 @@ export const loadCart = () => {
             return JSON.parse(localStorage.getItem("cart"));
         }
     }
-}
+};
 
 export const removeItemFromCart = productId => {
     let cart = [];
@@ -38,8 +38,10 @@ export const removeItemFromCart = productId => {
 };
 
 export const cartEmpty = next => {
-    if (typeof window !== undefined) {
-        localStorage.removeItem("cart");
-        next();
-    }
-}
+  if (typeof window !== undefined) {
+    localStorage.removeItem("cart");
+    let cart = [];
+    localStorage.setItem("cart", JSON.stringify(cart));
+    next();
+  }
+};

@@ -3,11 +3,12 @@ import { Link, withRouter } from 'react-router-dom';
 import { isAuthenticated, signout } from "../auth/helper";
 
 const currentTab = (history, path) => {
-    if (history.location.pathname === path)
-        return { color: "#4DD637" }
-    else
-        return { color: "#FFFFFF" }
-}
+  if (history.location.pathname === path) {
+    return { color: "#2ecc72" };
+  } else {
+    return { color: "#FFFFFF" };
+  }
+};
 
 const Menu = ({history}) => (
   <div>

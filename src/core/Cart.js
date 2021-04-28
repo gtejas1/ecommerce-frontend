@@ -3,7 +3,7 @@ import Base from "./Base";
 import "../styles.css";
 import Card from './Card';
 import { loadCart } from './helper/cartHelper';
-
+import  Paymentb  from './Paymentb';
 
 const Cart=() =>{
     const [products, setProducts] = useState([]);
@@ -12,14 +12,14 @@ const Cart=() =>{
     useEffect(() => {
         setProducts(loadCart());
         
-    }, [reload])
+    }, [reload]);
       
    
   
-    const loadAllProducts = () => {
+    const loadAllProducts = products => {
         return(
             <div>
-                <h2>This section is to load</h2>
+                <h2>This section is to load products</h2>
                 {products.map((product, index) => (
                     <Card
                         key={index}
@@ -31,8 +31,8 @@ const Cart=() =>{
                     />
                 ))}
             </div >
-        )
-    }
+        );
+    };
 
     const loadCheckout = () => {
         return(
@@ -43,17 +43,21 @@ const Cart=() =>{
     }
 
     return (
-        <Base title="Cart page" description="Ready to checkout"> 
+        <Base title="Cart Page" description="Ready to checkout"> 
             <div className="row">
                 
                 <div className="col-6">
-                    {loadAllProducts()}
+                    {products.length > 0 ? (
+                        loadAllProducts(products)
+                    ) : (
+                        <h4>No products</h4>
+                    )}
                 </div>
                 <div className="col-6">
-                    {loadCheckout()}
+                    <Paymentb products={products} setReload={ setReload}/>
                    </div>
             </div>
         </Base>
-    )
-}
+    );
+};
 export default Cart;

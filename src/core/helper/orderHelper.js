@@ -4,8 +4,8 @@ export const createOrder = (userId, token, orderData) => {
     return fetch(`${API}/order/create/${userId}`, {
         method: "POST",
         headers: {
-            Accept: "application/jason",
-            "Content-Type": "application/jason",
+            Accept: "application/json",
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({ order: orderData })

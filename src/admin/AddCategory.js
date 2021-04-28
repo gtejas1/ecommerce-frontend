@@ -13,24 +13,24 @@ const AddCategory = () => {
   
   const goBack = () => (
     <div className="mt-5">
-      <Link className="btn btn-small btn-success mb-3" to="/admin/dashboard">
+      <Link className="btn btn-sm btn-success mb-3" to="/admin/dashboard">
         Admin Home
       </Link>
     </div>
   );
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     setError("");
     setName(event.target.value);
   };
 
-  const onSubmit = (event) => {
+  const onSubmit = event => {
     event.preventDefault();
     setError("");
     setSuccess(false);
 
     //backend request fired
-    createCategory(user._id, token, { name }).then((data) => {
+    createCategory(user._id, token, { name }).then(data => {
       if (data.error) {
         setError(true);
       } else {
