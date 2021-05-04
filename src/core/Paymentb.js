@@ -1,106 +1,118 @@
-import React, { useState, useEffect } from 'react';
-import { loadCart ,cartEmpty} from './helper/cartHelper';
-import { Link } from 'react-router-dom';
-import { getmeToken, processPayment } from './helper/paymentBHelper';
-import { createOrder } from './helper/orderHelper';
-import { isAuthenticated } from '../auth/helper';
-import DropIn from 'braintree-web-drop-in-react';
+import React, { useState, useEffect } from "react";
+import { loadCart, cartEmpty } from "./helper/cartHelper";
+import { Link } from "react-router-dom";
+import { getmeToken, processPayment } from "./helper/paymentBHelper";
+import { createOrder } from "./helper/orderHelper";
+import { isAuthenticated } from "../auth/helper";
+import { DropIn } from "braintree-web-drop-in-react";
 
+class Paymentb extends React.Component {
+  state = {
+    info: {
+      loading: false,
+      success: false,
+      clientToken: null,
+      error: "",
+    },
+  };
 
-const Paymentb = ({products, setReload = f => f, reload = undefined}) => {
-    
-    const [info, setInfo] = useState({
-        loading: false,
-        success: false,
-        clientToken: null,
-        error: false,
-        instance:{}
-    });
+  getToken = async (userId, token) => {
+    const info = await getmeToken(userId, token);
+    if (info.error) {
+      this.setState({ info: { ...this.state.info, error: info.error } });
+    } else {
+      this.setState({
+        info: { ...this.state.info, clientToken: info.clientToken },
+      });
+    }
+  };
 
+  showbtDropIn = () => {
+    return (
+      <div>
+        {this.state.info.clientToken && this.props.products.length > 0 ? (
+          <div>
+            <DropIn
+              options={{ authorization: this.state.info.clientToken }}
+              onInstance={(instance) => (this.instance = instance)}
+            />
+            <button
+              className="btn btn-block btn-success"
+              onClick={this.onPurchase}
+            >
+              Buy
+            </button>
+          </div>
+        ) : (
+          <h3>Please login or add something to cart</h3>
+        )}
+      </div>
+    );
+  };
+
+  componentDidMount() {
     const userId = isAuthenticated() && isAuthenticated().user._id;
     const token = isAuthenticated() && isAuthenticated().token;
+    this.getToken(userId, token);
+  }
 
-    const getToken = (userId, token) => {
-        getmeToken(userId, token).then(info => {
-            console.log("INFORMATION:", info);
-            if (info.error) {
-                setInfo({ ...info, error: info.error });
-            }
-            else {
-                const clientToken = info.clientToken;
-                setInfo({ clientToken });
-            }
-        });
-    };
-
-    const showbtDropIn = () => {
-        return (
-            <div>
-                {info.clientToken !== null && products.length > 0 ? (
-                   <div>
-                   <DropIn
-                     options={{ authorization: info.clientToken }}
-                     onInstance={instance => (info.instance = instance)}
-                   />
-                   <button className="btn btn-block btn-success" onClick={onPurchase}>
-                   Buy
-                   </button>
-                 </div>
-                ):(
-                <h3>Please login or add something to cart</h3>)}
-            </div>
-        );
-    };
-
-    useEffect(() => {
-        getToken(userId, token);
-    }, []);
-
-    const onPurchase = () => {
-        setInfo({ loading: true });
-        let nonce;
-        let getNonce = info.instance.requestPaymentMethod().then(data => {
-          nonce = data.nonce;
-          const paymentData = {
-            paymentMethodNonce: nonce,
-            amount: getAmount()
-          };
-          processPayment(userId, token, paymentData)
-            .then(response => {
-              setInfo({ ...info, success: response.success, loading: false });
-              console.log("PAYMENT SUCCESS");
-              const orderData = {
-                products: products,
-                transaction_id: response.transaction.id,
-                amount: response.transaction.amount
-              };
-              createOrder(userId, token, orderData);
-              cartEmpty(() => {
-                console.log("Did we got a crash?");
-              });
-    
-              setReload(!reload);
-            })
-            .catch(error => {
-              setInfo({ loading: false, success: false });
-              console.log("PAYMENT FAILED");
-            });
-        });
+  onPurchase = () => {
+    const userId = isAuthenticated() && isAuthenticated().user._id;
+    const token = isAuthenticated() && isAuthenticated().token;
+    this.setState({ loading: true });
+    let nonce;
+    let getNonce = this.instance.requestPaymentMethod().then((data) => {
+      nonce = data.nonce;
+      const paymentData = {
+        paymentMethodNonce: nonce,
+        amount: this.getAmount(),
       };
+      processPayment(userId, token, paymentData)
+        .then((response) => {
+          this.setState({
+            info: {
+              ...this.state.info,
+              success: response.success,
+              loading: false,
+            },
+          });
 
-    const getAmount = () => {
-        let amount = 0;
-        products.map(p => {
-            amount = amount + p.price;
+          console.log("PAYMENT SUCCESS");
+          const orderData = {
+            products: this.state.products,
+            transaction_id: response.transaction.id,
+            amount: response.transaction.amount,
+          };
+          createOrder(userId, token, orderData);
+          cartEmpty(() => {
+            console.log("Did we get a crash?");
+          });
+
+          this.props.setReload(!this.props.reload);
+        })
+        .catch((error) => {
+          this.setState({ info: { loading: false, success: false } });
+
+          console.log("PAYMENT FAILED");
         });
-        return amount;
-};
+    });
+  };
 
+  getAmount = () => {
+    let amount = 0;
+    this.props.products.map((p) => {
+      amount = amount + p.price;
+    });
+    return amount;
+  };
+
+  render() {
     return (
-        <div>
-            <h3>Your bill is ${getAmount()}</h3>
-            {showbtDropIn()}
-        </div>
+      <div>
+        <h3>Your bill is ${this.getAmount()}</h3>
+        {this.showbtDropIn()}
+      </div>
     );
-};
+  }
+}
 export default Paymentb;

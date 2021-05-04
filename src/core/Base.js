@@ -1,14 +1,7 @@
 import React from "react";
 import Menu from "./Menu";
 
-const Base = (
-    {
-        title = "My title",
-        description = "My description",
-        className = "bg-dark text-white p-4",
-        children
-    }
-) => (
+const Base = ({title = "My title",description = "My description",className = "bg-dark text-white p-4",children}) => (
   <div>
     <Menu/>
     <div className="container-fluid">
