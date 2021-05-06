@@ -48,7 +48,10 @@ const Cart=() =>{
         <Base title="Cart Page" description="Ready to checkout"> 
             <div className="row text-center">
                 
-                <div className="col-6">{loadAllProducts()}</div>
+                <div className="col-6">{
+                    products.length > 0 ?
+                        loadAllProducts() : <h3>Add some products to the cart!</h3>
+                }</div>
                 <div className="col-6">
                     {/* <Paymentb products={products} setReload={setReload} /> */}
                     <StripeCheckout products={products} setReload={setReload} />
