@@ -27,15 +27,17 @@ export default function Home() {
       <div className="row">
         <h1 className="text-white">All of t-shirts</h1>
         <div className="row">
-          {products.length > 0
-            ? products.map((product, index) => {
-                return (
-                  <div key={index} className="col-4 mb-4">
-                    <Card product={product} />
-                  </div>
-                );
-              })
-            : "No products to display"}
+          {products.length > 0 ? (
+            products.map((product, index) => {
+              return (
+                <div key={index} className="col-4 mb-4">
+                  <Card product={product} />
+                </div>
+              );
+            })
+          ) : (
+            <h3>"No products to display"</h3>
+          )}
         </div>
       </div>
     </Base>
