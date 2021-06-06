@@ -10,8 +10,8 @@ const currentTab = (history, path) => {
   }
 };
 
-const Menu = ({history}) => (
-  <div>
+  const Menu = ({history}) => (
+    <div>
     <ul className="nav nav-tabs bg-dark">
       <li className="nav-item">
         <Link style={currentTab(history, "/")} className="nav-link" to="/">
@@ -20,7 +20,7 @@ const Menu = ({history}) => (
       </li>
       <li className="nav-item">
         <Link style={currentTab(history, "/cart")} className="nav-link" to="/cart">
-          Cart
+          Cart (0)
         </Link>
       </li>
       {isAuthenticated() && isAuthenticated().user.role === 0 && (

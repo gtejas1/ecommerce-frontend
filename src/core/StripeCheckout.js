@@ -62,7 +62,7 @@ const StripeCheckout = ({
       </StripeCheckoutButton>
     ) : (
       <Link to="/signin">
-        <button className="btn btn-warning">Signin</button>
+        <button className="btn btn-warning">Sign In</button>
       </Link>
     );
   };
