@@ -3,6 +3,7 @@ import Base from "./Base";
 import "../styles.css";
 import Card from "./Card";
 import { getProducts } from "./helper/coreapicalls";
+import ImageHelper from "./helper/ImageHelper";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -36,7 +37,7 @@ export default function Home() {
               );
             })
           ) : (
-            <h3>"No products to display"</h3>
+            <h3>Oops! No products to display yet!</h3>
           )}
         </div>
       </div>

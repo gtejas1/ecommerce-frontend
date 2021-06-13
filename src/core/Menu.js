@@ -1,6 +1,7 @@
-import  React ,{Fragment} from 'react'
-import { Link, withRouter } from 'react-router-dom';
+import React, { Fragment } from "react";
+import { Link, withRouter } from "react-router-dom";
 import { isAuthenticated, signout } from "../auth/helper";
+import "../styles.css";
 
 const currentTab = (history, path) => {
   if (history.location.pathname === path) {
@@ -10,8 +11,8 @@ const currentTab = (history, path) => {
   }
 };
 
-  const Menu = ({history}) => (
-    <div>
+const Menu = ({ history }) => (
+  <div className="header">
     <ul className="nav nav-tabs bg-dark">
       <li className="nav-item">
         <Link style={currentTab(history, "/")} className="nav-link" to="/">
@@ -19,52 +20,72 @@ const currentTab = (history, path) => {
         </Link>
       </li>
       <li className="nav-item">
-        <Link style={currentTab(history, "/cart")} className="nav-link" to="/cart">
+        <Link
+          style={currentTab(history, "/cart")}
+          className="nav-link"
+          to="/cart"
+        >
           Cart (0)
         </Link>
       </li>
       {isAuthenticated() && isAuthenticated().user.role === 0 && (
         <li className="nav-item">
-        <Link style={currentTab(history, "/user/dashboard")} className="nav-link" to="/user/dashboard">
-          U.Dashboard
-        </Link>
-      </li>
+          <Link
+            style={currentTab(history, "/user/dashboard")}
+            className="nav-link"
+            to="/user/dashboard"
+          >
+            U.Dashboard
+          </Link>
+        </li>
       )}
       {isAuthenticated() && isAuthenticated().user.role === 1 && (
         <li className="nav-item">
-        <Link style={currentTab(history, "/admin/dashboard")} className="nav-link" to="/admin/dashboard">
-          A.Dashboard
-        </Link>
-      </li>
+          <Link
+            style={currentTab(history, "/admin/dashboard")}
+            className="nav-link"
+            to="/admin/dashboard"
+          >
+            A.Dashboard
+          </Link>
+        </li>
       )}
       {!isAuthenticated() && (
         <Fragment>
-        <li className="nav-item">
-          <Link style={currentTab(history, "/user/signup")} className="nav-link" to="/signup">
-            SignUp
-          </Link>
-        </li>
-        
-        <li className="nav-item">
-          <Link style={currentTab(history, "/user/signin")} className="nav-link" to="/signin">
-            SignIn
-          </Link>
+          <li className="nav-item">
+            <Link
+              style={currentTab(history, "/user/signup")}
+              className="nav-link"
+              to="/signup"
+            >
+              SignUp
+            </Link>
           </li>
-          </Fragment>         
+
+          <li className="nav-item">
+            <Link
+              style={currentTab(history, "/user/signin")}
+              className="nav-link"
+              to="/signin"
+            >
+              SignIn
+            </Link>
+          </li>
+        </Fragment>
       )}
       {isAuthenticated() && (
         <li className="nav-item">
           <span
             className="nav-link text-warning"
             onClick={() => {
-              signout(()=> {
-             history.push("/") 
-            })
-          }}
+              signout(() => {
+                history.push("/");
+              });
+            }}
           >
             Signout
-        </span>
-      </li>
+          </span>
+        </li>
       )}
     </ul>
   </div>
