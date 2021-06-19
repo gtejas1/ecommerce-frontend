@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { isAuthenticated, signout } from "../auth/helper";
+import { loadCart } from "./helper/cartHelper";
 import "../styles.css";
 
 const currentTab = (history, path) => {
@@ -25,7 +26,11 @@ const Menu = ({ history }) => (
           className="nav-link"
           to="/cart"
         >
-          Cart (0)
+          Cart (
+          {localStorage.getItem("cart")
+            ? Object.keys(JSON.parse(localStorage.getItem("cart"))).length
+            : "0"}
+          )
         </Link>
       </li>
       {isAuthenticated() && isAuthenticated().user.role === 0 && (

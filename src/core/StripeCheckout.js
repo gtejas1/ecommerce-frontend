@@ -8,14 +8,14 @@ import { createOrder } from "./helper/orderHelper";
 
 const StripeCheckout = ({
   products,
-  setReload = f => f,
-  reload = undefined
+  setReload = (f) => f,
+  reload = undefined,
 }) => {
   const [data, setData] = useState({
     loading: false,
     success: false,
     error: "",
-    address: ""
+    address: "",
   });
 
   const token = isAuthenticated() && isAuthenticated().token;
@@ -23,29 +23,30 @@ const StripeCheckout = ({
 
   const getFinalAmount = () => {
     let amount = 0;
-    products.map(p => {
+    products.map((p) => {
       amount = amount + p.price;
     });
     return amount;
   };
 
-  const makePayment = token => {
+  const makePayment = (token) => {
     const body = {
       token,
-      products
-    }
+      products,
+    };
     const headers = {
-      "Content-Type":"application/json"
-    }
+      "Content-Type": "application/json",
+    };
     return fetch(`${API}/stripepayment`, {
       method: "POST",
       headers,
-      body: JSON.stringify(body)
-    }).then(response => {
-      console.log(response);
-      //call further methods
+      body: JSON.stringify(body),
     })
-    .catch(err=>console.log(err))
+      .then((response) => {
+        console.log(response);
+        //call further methods
+      })
+      .catch((err) => console.log(err));
   };
 
   const showStripeButton = () => {
