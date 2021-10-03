@@ -39,7 +39,7 @@ export default function Home() {
             })
           ) : (
             // <h3>Oops! No products to display yet!</h3>
-            <Loader type="spin" color="cyan" />
+            <Loader type="bubbles" color="cyan" />
           )}
         </div>
       </div>
