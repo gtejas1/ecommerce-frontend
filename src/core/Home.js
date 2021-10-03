@@ -4,6 +4,7 @@ import "../styles.css";
 import Card from "./Card";
 import { getProducts } from "./helper/coreapicalls";
 import ImageHelper from "./helper/ImageHelper";
+import Loader from "./Loader";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -26,7 +27,7 @@ export default function Home() {
   return (
     <Base title="CENTIXO" description="Welcome to the CENTIXO t-shirt store">
       <div className="row">
-        <h1 className="text-white">All of t-shirts</h1>
+        <h1 className="text-white">All of T-Shirts</h1>
         <div className="row">
           {products.length > 0 ? (
             products.map((product, index) => {
@@ -37,7 +38,8 @@ export default function Home() {
               );
             })
           ) : (
-            <h3>Oops! No products to display yet!</h3>
+            // <h3>Oops! No products to display yet!</h3>
+            <Loader type="spin" color="cyan" />
           )}
         </div>
       </div>
