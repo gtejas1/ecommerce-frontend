@@ -26,13 +26,14 @@ export default function Home() {
 
   return (
     <Base title="CENTIXO" description="Welcome to the CENTIXO t-shirt store">
-      <div className="row">
+      <div className="row justify-content-center">
         <h1 className="text-white">All of T-Shirts</h1>
+
         <div className="row">
           {products.length > 0 ? (
             products.map((product, index) => {
               return (
-                <div key={index} className="col-4 mb-4">
+                <div key={index} className="col-sm-6 col-md-4">
                   <Card product={product} />
                 </div>
               );
